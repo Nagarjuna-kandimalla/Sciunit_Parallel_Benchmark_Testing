@@ -1,0 +1,2 @@
+The current version of GHCN Daily is 3.34-upd-2026032218 (i.e, an update that started at 2026032218 [yyyymmddhh] UTC; yyyy=year; mm=month; dd=day; hh=hour),
+created by appending recently available data updates to the last fully reprocessed version: 3.34-por-2026030921.

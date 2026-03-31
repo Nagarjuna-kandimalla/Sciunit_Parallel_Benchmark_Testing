@@ -1,0 +1,5 @@
+/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0061.txt
+/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0062.txt
+/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0063.txt
+/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0064.txt
+/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0065.txt
