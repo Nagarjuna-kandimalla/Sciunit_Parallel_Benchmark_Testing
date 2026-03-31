@@ -1,0 +1,13 @@
+{
+  "step": "merge",
+  "input_pattern": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/run_jobs_used8_003_20260330_062715/sciunit/1g/processed/*_run_jobs_used8_003_20260330_062715.out",
+  "output_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/run_jobs_used8_003_20260330_062715/sciunit/1g/final_output_run_jobs_used8_003_20260330_062715.txt",
+  "log_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_jobs_used8_003_20260330_062715/rules/sciunit/1g/merge_run_jobs_used8_003_20260330_062715.log",
+  "total_files": 175,
+  "total_input_bytes": 963136156,
+  "final_output_bytes": 963136156,
+  "total_lines": 31468248,
+  "start_time": "2026-03-30T06:30:45.177557",
+  "end_time": "2026-03-30T06:30:49.736347",
+  "duration_sec": 4.55879
+}

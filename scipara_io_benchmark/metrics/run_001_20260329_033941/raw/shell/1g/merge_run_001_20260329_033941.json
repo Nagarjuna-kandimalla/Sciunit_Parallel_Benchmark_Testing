@@ -1,0 +1,13 @@
+{
+  "step": "merge",
+  "input_pattern": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/run_001_20260329_033941/shell/1g/processed/*_run_001_20260329_033941.out",
+  "output_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/run_001_20260329_033941/shell/1g/final_output_run_001_20260329_033941.txt",
+  "log_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_001_20260329_033941/rules/shell/1g/merge_run_001_20260329_033941.log",
+  "total_files": 175,
+  "total_input_bytes": 963136156,
+  "final_output_bytes": 963136156,
+  "total_lines": 31468248,
+  "start_time": "2026-03-29T03:43:19.503282",
+  "end_time": "2026-03-29T03:43:24.525210",
+  "duration_sec": 5.021927
+}

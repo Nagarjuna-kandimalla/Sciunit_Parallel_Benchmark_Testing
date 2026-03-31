@@ -1,0 +1,16 @@
+[START] Batch: batch_013 (Sciunit)
+[INFO] Mode: sciunit | Size: 1g
+[INFO] Run label: run_jobs_used8_003_20260330_062715
+[INFO] Batch file: /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/batches/1g/batch_013.txt
+[INFO] Process script: scripts/execution/process_splits.py
+[INFO] Sciunit project: project_run_jobs_used8_003_20260330_062715_batch_013
+[INFO] Starting monitor: /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_jobs_used8_003_20260330_062715/monitor/sciunit_1g_batch_013_run_jobs_used8_003_20260330_062715.csv
+[INFO] Launching Sciunit parallel tasks...
+[INFO] Creating fresh Sciunit project...
+[MONITOR] Writing to /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_jobs_used8_003_20260330_062715/monitor/sciunit_1g_batch_013_run_jobs_used8_003_20260330_062715.csv
+[MONITOR] Interval: 1s
+Warning: This will overwrite the existing sciunit!
+Opened empty sciunit at /home/nkmh5/sciunit/project_run_jobs_used8_003_20260330_062715_batch_013
+[MONITOR] Stopped.
+[END] Batch: batch_013 completed (Sciunit)
+[INFO] Duration: 5s

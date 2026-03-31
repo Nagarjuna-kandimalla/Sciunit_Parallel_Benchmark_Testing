@@ -1,0 +1,16 @@
+[START] Batch: batch_013
+[INFO] Mode: shell | Size: 1g
+[INFO] Run label: run_001_20260329_033941
+[INFO] Batch file: /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/batches/1g/batch_013.txt
+[INFO] Process script: scripts/execution/process_splits.py
+[INFO] Starting monitor: /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_001_20260329_033941/monitor/shell_1g_batch_013_run_001_20260329_033941.csv
+[INFO] Launching split: split_0061
+[INFO] Launching split: split_0062
+[INFO] Launching split: split_0063
+[INFO] Launching split: split_0064
+[MONITOR] Writing to /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_001_20260329_033941/monitor/shell_1g_batch_013_run_001_20260329_033941.csv
+[MONITOR] Interval: 1s
+[INFO] Launching split: split_0065
+[MONITOR] Stopped.
+[END] Batch: batch_013 completed successfully
+[INFO] Duration: 1s

@@ -1,0 +1,19 @@
+{
+  "input_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0061.txt",
+  "output_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/run_jobs_used8_003_20260330_062715/sciunit/1g/processed/split_0061_run_jobs_used8_003_20260330_062715.out",
+  "metrics_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/metrics/run_jobs_used8_003_20260330_062715/raw/sciunit/1g/split_0061_run_jobs_used8_003_20260330_062715.json",
+  "log_file": "/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs/run_jobs_used8_003_20260330_062715/rules/sciunit/1g/split_0061_run_jobs_used8_003_20260330_062715.log",
+  "input_bytes": 6101594,
+  "output_bytes": 6094795,
+  "input_lines": 200000,
+  "output_lines": 199779,
+  "bad_lines": 0,
+  "kept_elements": [
+    "PRCP",
+    "TMAX",
+    "TMIN"
+  ],
+  "start_time": "2026-03-30T06:30:14.393015",
+  "end_time": "2026-03-30T06:30:14.594622",
+  "duration_sec": 0.201606
+}

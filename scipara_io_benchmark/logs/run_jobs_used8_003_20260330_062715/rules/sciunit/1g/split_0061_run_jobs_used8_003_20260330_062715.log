@@ -1,0 +1,10 @@
+[2026-03-30 06:30:14] START processing splits: /cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data/splits/1g/split_0061.txt
+[2026-03-30 06:30:14] Input file size: 6101594 bytes
+[2026-03-30 06:30:14] Finished processing
+[2026-03-30 06:30:14] Total input lines: 200000
+[2026-03-30 06:30:14] Total output lines: 199779
+[2026-03-30 06:30:14] Bad lines: 0
+[2026-03-30 06:30:14] Output size: 6094795 bytes
+[2026-03-30 06:30:14] Duration: 0.2016 sec
+[2026-03-30 06:30:14] Metrics written successfully
+[2026-03-30 06:30:14] END
