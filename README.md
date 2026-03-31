@@ -3,9 +3,9 @@
 This repository contains the `scipara_io_benchmark` workflow used to benchmark split-based file processing in two modes:
 
 - `shell`
-- `sciunit`
+- `sciunit -parallel`
 
-The benchmark prepares a weather dataset, splits it into many files, groups those files into batches, processes the batches in parallel through Snakemake + Slurm, merges the processed outputs, and aggregates metrics.
+The benchmark prepares a weather dataset, splits it into many files, groups those files into batches, processes the batches in parallel through Snakemake + Slurm (shell and sciunit mode execution), merges the processed outputs, and aggregates metrics.
 
 ## Repository Layout
 
