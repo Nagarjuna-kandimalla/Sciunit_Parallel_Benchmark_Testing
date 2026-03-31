@@ -2,6 +2,7 @@
 
 import os
 import argparse
+from pathlib import Path
 from logger import get_logger
 from paths import PROJECT_ROOT, size_label
 
@@ -22,7 +23,17 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     with open(MANIFEST) as f:
-        splits = [line.strip() for line in f if line.strip()]
+        splits = []
+        for line in f:
+            split_path = line.strip()
+            if not split_path:
+                continue
+
+            split = Path(split_path)
+            if not split.is_absolute():
+                split = (PROJECT_ROOT / split).resolve()
+
+            splits.append(str(split))
 
     batch_count = 0
 

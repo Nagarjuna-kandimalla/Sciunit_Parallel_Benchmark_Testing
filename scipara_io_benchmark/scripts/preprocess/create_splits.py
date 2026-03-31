@@ -16,11 +16,11 @@ SIZE_LABEL = size_label(SIZE_GB)
 INPUT_FILE = PROJECT_ROOT / "data" / "prepared" / SIZE_LABEL / "input.txt"
 OUTPUT_DIR = PROJECT_ROOT / "data" / "splits" / SIZE_LABEL
 
-LINES_PER_SHARD = 200000
+LINES_PER_SPLIT = 200000
 
 
-def write_shard(lines, shard_id):
-    path = OUTPUT_DIR / f"split_{shard_id:04d}.txt"
+def write_split(lines, split_id):
+    path = OUTPUT_DIR / f"split_{split_id:04d}.txt"
     with open(path, "w") as f:
         f.writelines(lines)
 
@@ -32,7 +32,7 @@ def main():
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    shard_id = 1
+    split_id = 1
     buffer = []
     total_lines = 0
 
@@ -41,13 +41,13 @@ def main():
             buffer.append(line)
             total_lines += 1
 
-            if (i + 1) % LINES_PER_SHARD == 0:
-                write_shard(buffer, shard_id)
+            if (i + 1) % LINES_PER_SPLIT == 0:
+                write_split(buffer, split_id)
                 buffer = []
-                shard_id += 1
+                split_id += 1
 
         if buffer:
-            write_shard(buffer, shard_id)
+            write_split(buffer, split_id)
 
     logger.info(f"Splits creation complete. Total lines: {total_lines}")
 

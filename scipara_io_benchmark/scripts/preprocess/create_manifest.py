@@ -2,6 +2,7 @@
 
 import glob
 import argparse
+from pathlib import Path
 from logger import get_logger
 from paths import PROJECT_ROOT, size_label
 
@@ -18,12 +19,12 @@ OUTPUT_FILE = PROJECT_ROOT / "data" / "manifests" / f"splits_{SIZE_LABEL}.txt"
 def main():
     logger.info("Creating manifest")
 
-    splits = sorted(glob.glob(str(SPLIT_DIR / "*.txt")))
+    splits = sorted(Path(path).resolve() for path in glob.glob(str(SPLIT_DIR / "*.txt")))
     OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
     with open(OUTPUT_FILE, "w") as f:
         for split_path in splits:
-            f.write(split_path + "\n")
+            f.write(str(split_path) + "\n")
 
     logger.info(f"Manifest created with {len(splits)} splits")
 
