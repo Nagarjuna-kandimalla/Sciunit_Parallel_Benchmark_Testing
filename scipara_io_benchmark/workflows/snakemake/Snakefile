@@ -1,0 +1,221 @@
+import os
+import glob
+import re
+from datetime import datetime
+from pathlib import Path
+
+# -----------------------------
+# CONFIG
+# -----------------------------
+WORKFLOW_DIR = Path(workflow.basedir).resolve()
+BENCHMARK_ROOT = WORKFLOW_DIR.parents[1]
+configfile: str(BENCHMARK_ROOT / "configs" / "global.yaml")
+
+MODE = config["mode"]
+SIZE = config["dataset_size"]
+
+DATA_ROOT = config["data_root"]
+BATCH_ROOT = config["batch_root"]
+RESULT_ROOT = config["results_root"]
+METRICS_ROOT = config["metrics_root"]
+LOG_ROOT = config["logs_root"]
+
+PROCESS_SCRIPT = config["process_script"]
+MERGE_SCRIPT = config["merge_script"]
+COLLECT_SCRIPT = config["collect_script"]
+MONITOR_SCRIPT = config.get("monitor_script", "scripts/execution/monitor.py")
+
+ENABLE_MONITOR = config.get("enable_monitor", True)
+ENABLE_MONITOR_STR = "true" if ENABLE_MONITOR else "false"
+RUN_LABEL_OVERRIDE = str(config.get("run_label", "") or "").strip()
+RUN_NUMBER_OVERRIDE = str(config.get("run_number", "") or "").strip()
+RUN_NUMBER_START = int(config.get("run_number_start", 1))
+
+
+def extract_run_number(path):
+    match = re.match(r"run_(\d+)_", path.name)
+    if not match:
+        return None
+    return int(match.group(1))
+
+
+def compute_next_run_number():
+    numbers = []
+
+    for root_name in (RESULT_ROOT, METRICS_ROOT, LOG_ROOT):
+        root_path = BENCHMARK_ROOT / root_name
+        if not root_path.exists():
+            continue
+
+        for child in root_path.iterdir():
+            if not child.is_dir():
+                continue
+
+            run_number = extract_run_number(child)
+            if run_number is not None:
+                numbers.append(run_number)
+
+    return max(numbers, default=RUN_NUMBER_START - 1) + 1
+
+
+RUN_TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
+RUN_NUMBER = int(
+    os.environ.get(
+        "SCIPARA_RUN_NUMBER",
+        RUN_NUMBER_OVERRIDE or compute_next_run_number(),
+    )
+)
+RUN_LABEL = os.environ.get("SCIPARA_RUN_LABEL", RUN_LABEL_OVERRIDE or f"run_{RUN_NUMBER:03d}_{RUN_TIMESTAMP}")
+
+# Export the resolved run context so Snakemake child processes submitted via
+# sbatch inherit the exact same run label instead of recomputing a new one.
+os.environ["SCIPARA_RUN_NUMBER"] = str(RUN_NUMBER)
+os.environ["SCIPARA_RUN_LABEL"] = RUN_LABEL
+
+# -----------------------------
+# PATHS
+# -----------------------------
+BATCH_DIR = str(BENCHMARK_ROOT / BATCH_ROOT / SIZE)
+RESULT_DIR = str(BENCHMARK_ROOT / RESULT_ROOT / RUN_LABEL / MODE / SIZE)
+METRICS_DIR = str(BENCHMARK_ROOT / METRICS_ROOT / RUN_LABEL / "raw" / MODE / SIZE)
+LOG_DIR = str(BENCHMARK_ROOT / LOG_ROOT / RUN_LABEL)
+
+MONITOR_DIR = f"{LOG_DIR}/monitor"
+AGG_METRICS_DIR = str(BENCHMARK_ROOT / METRICS_ROOT / RUN_LABEL / "aggregated")
+
+# -----------------------------
+# GET BATCHES
+# -----------------------------
+BATCHES = sorted([
+    f.split(".")[0].split("_")[1]
+    for f in os.listdir(BATCH_DIR)
+    if f.startswith("batch_") and f.endswith(".txt")
+])
+
+# -----------------------------
+# FINAL TARGET
+# -----------------------------
+rule all:
+    input:
+        f"{AGG_METRICS_DIR}/{MODE}_{SIZE}_{RUN_LABEL}.done"
+
+# -----------------------------
+# RUN BATCHES
+# -----------------------------
+rule run_batch:
+    input:
+        batch_file=lambda wc: f"{BATCH_DIR}/batch_{wc.batch}.txt"
+    output:
+        touch(f"{RESULT_DIR}/batch_{{batch}}_{RUN_LABEL}.done")
+    params:
+        mode=MODE,
+        size=SIZE,
+        process_script=PROCESS_SCRIPT,
+        monitor_script=MONITOR_SCRIPT,
+        enable_monitor=ENABLE_MONITOR_STR,
+        run_label=RUN_LABEL
+    threads: 5
+    shell:
+        """
+        echo "[SNAKEMAKE] Running batch {wildcards.batch}"
+        echo "[SNAKEMAKE] Run label: {params.run_label}"
+
+        if [ "{params.mode}" = "shell" ]; then
+            bash "{BENCHMARK_ROOT}/execution/shell/run_batch.sh" \
+                "{input.batch_file}" "{params.mode}" "{params.size}" \
+                "{params.process_script}" "{params.enable_monitor}" "{params.monitor_script}" "{params.run_label}"
+        else
+            bash "{BENCHMARK_ROOT}/execution/sciunit/run_batch_sciunit.sh" \
+                "{input.batch_file}" "{params.mode}" "{params.size}" \
+                "{params.process_script}" "{params.enable_monitor}" "{params.monitor_script}" "{params.run_label}"
+        fi
+        """
+
+# -----------------------------
+# MERGE OUTPUTS
+# -----------------------------
+rule merge_outputs:
+    input:
+        expand(f"{RESULT_DIR}/batch_{{batch}}_{RUN_LABEL}.done", batch=BATCHES)
+    output:
+        final=f"{RESULT_DIR}/final_output_{RUN_LABEL}.txt"
+    params:
+        mode=MODE,
+        size=SIZE
+    shell:
+        """
+        echo "[SNAKEMAKE] Merging outputs"
+
+        python "{BENCHMARK_ROOT}/{MERGE_SCRIPT}" \
+            "{RESULT_DIR}/processed/*_{RUN_LABEL}.out" \
+            "{output.final}" \
+            "{LOG_DIR}/rules/{params.mode}/{params.size}/merge_{RUN_LABEL}.log" \
+            "{METRICS_DIR}/merge_{RUN_LABEL}.json"
+        """
+
+# -----------------------------
+# COMBINE MONITOR FILES
+# -----------------------------
+rule combine_monitor_logs:
+    input:
+        expand(f"{RESULT_DIR}/batch_{{batch}}_{RUN_LABEL}.done", batch=BATCHES)
+    output:
+        combined=f"{MONITOR_DIR}/{MODE}_{SIZE}_{RUN_LABEL}_combined.csv"
+    params:
+        mode=MODE,
+        size=SIZE
+    run:
+        import glob
+
+        os.makedirs(MONITOR_DIR, exist_ok=True)
+
+        files = glob.glob(f"{MONITOR_DIR}/{MODE}_{SIZE}_batch_*_{RUN_LABEL}.csv")
+
+        with open(output.combined, "w") as outfile:
+            if not files:
+                outfile.write(
+                    "timestamp,cpu_percent,mem_percent,disk_read_bytes,"
+                    "disk_write_bytes,load_avg_1min\n"
+                )
+            else:
+                first = True
+                for f in sorted(files):
+                    with open(f) as infile:
+                        if first:
+                            outfile.write(infile.read())
+                            first = False
+                        else:
+                            next(infile)  # skip header
+                            outfile.write(infile.read())
+
+# -----------------------------
+# COLLECT METRICS
+# -----------------------------
+rule collect_metrics:
+    input:
+        final=f"{RESULT_DIR}/final_output_{RUN_LABEL}.txt",
+        monitor=f"{MONITOR_DIR}/{MODE}_{SIZE}_{RUN_LABEL}_combined.csv"
+    output:
+        done=f"{AGG_METRICS_DIR}/{MODE}_{SIZE}_{RUN_LABEL}.done"
+    params:
+        mode=MODE,
+        size=SIZE,
+        run_label=RUN_LABEL
+    shell:
+        """
+        echo "[SNAKEMAKE] Collecting metrics"
+        echo "[SNAKEMAKE] Run label: {params.run_label}"
+
+        mkdir -p {AGG_METRICS_DIR}
+
+        python "{BENCHMARK_ROOT}/{COLLECT_SCRIPT}" \
+            "{params.mode}" \
+            "{params.size}" \
+            "{params.run_label}" \
+            "{METRICS_DIR}" \
+            "{input.monitor}" \
+            "{AGG_METRICS_DIR}/results_{params.run_label}.csv" \
+            "{AGG_METRICS_DIR}/{params.mode}_{params.size}_{params.run_label}_splits.csv"
+
+        touch {output.done}
+        """

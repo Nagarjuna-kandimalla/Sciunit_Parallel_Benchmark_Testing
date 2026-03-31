@@ -1,0 +1,34 @@
+mode: sciunit                # shell OR sciunit
+
+dataset_size: 1g           # 1g / 5g / 10g
+
+tasks_per_batch: 5         # MUST match your batch files
+
+# -----------------------------
+# Run naming
+# -----------------------------
+run_label: ""              # optional exact label, e.g. run_001_20260328_120000
+run_number: ""             # optional exact run number, e.g. 1
+run_number_start: 1        # minimum auto-generated run number
+
+# -----------------------------
+# Paths
+# -----------------------------
+data_root: data
+batch_root: batches
+results_root: results
+metrics_root: metrics
+logs_root: logs
+
+# -----------------------------
+# Script paths
+# -----------------------------
+process_script: scripts/execution/process_splits.py
+merge_script: scripts/execution/merge_outputs.py
+collect_script: scripts/execution/metrics.py
+monitor_script: scripts/execution/monitor.py
+
+# -----------------------------
+# Monitoring
+# -----------------------------
+enable_monitor: true

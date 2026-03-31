@@ -1,0 +1,14 @@
+executor: slurm
+
+jobs: 8
+
+default-resources:
+  - slurm_partition=general
+  - mem_mb=8000
+  - runtime=60
+
+set-resources:
+  run_batch:
+    cpus_per_task: 5
+
+latency-wait: 60
