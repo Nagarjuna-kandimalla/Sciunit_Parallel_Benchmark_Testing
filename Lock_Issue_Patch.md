@@ -4,12 +4,6 @@
 
 This note documents the two concurrency issues I observed while running `parallel-sciunit`, why they were intermittent, what I changed to fix them, and what results I obtained after the fixes.
 
-The intended audience is mixed:
-
-- students who want a beginner-level explanation of the bug
-- researchers who want the technical root cause and code references
-- anyone who needs to understand why the workflow sometimes worked and sometimes failed
-
 The main point is that there were **two different race conditions**:
 
 1. a **same-project write race** inside one SciUnit project
@@ -87,7 +81,7 @@ This also explains why a failure in one environment does **not** mean the comman
 
 ## 3. Issue 1: Same-Project Lock Race
 
-### 3.1 Beginner Explanation
+### 3.1 Simple Explanation
 
 Think of one SciUnit project as one shared office desk.
 
@@ -110,7 +104,7 @@ That caused collisions such as:
 
 That is why errors like `database is locked` or `execution 'e4' already exists` appeared.
 
-### 3.2 Beginner Example
+### 3.2 Example
 
 The simplest example was:
 
@@ -166,7 +160,7 @@ These were seen in direct SciUnit tests and later inside the SciUnit Snakemake b
 
 ## 4. Fix 1: Fine-Grained Locking Inside One Project
 
-### 4.1 Beginner Explanation
+### 4.1 Simple Explanation
 
 I changed the workflow from:
 
@@ -199,7 +193,7 @@ This design is right because:
 
 ### 4.2 Technical Explanation
 
-We introduced a real project lock file `.exec.lock` and used it only around the shared project updates.
+I introduced a project lock file `.exec.lock` and used it only around the shared project updates.
 
 The changes were:
 
@@ -250,7 +244,7 @@ This confirmed that the first race condition was fixed.
 
 ## 5. Issue 2: Wrong-Project Context Race
 
-### 5.1 Beginner Explanation
+### 5.1 Simple Explanation
 
 The second issue is different.
 
@@ -376,7 +370,7 @@ This was the clue that the problem was no longer only "same project locking." Th
 
 ## 6. Fix 2: Internal Scoped Project Binding
 
-### 6.1 Beginner Explanation
+### 6.1 Simple Explanation
 
 The fix is simple in concept:
 
@@ -556,7 +550,7 @@ This was the strongest practical confirmation that both original concurrency iss
 
 ### 8.4 After The Final Internal-Only Scoped-Activation Change
 
-We then removed the benchmark-side project export and reran from a clean state so the behavior depended only on the internal SciUnit changes.
+I then removed the benchmark-side project export and reran from a clean state so the behavior depended only on the internal SciUnit changes.
 
 Fresh rerun:
 
@@ -566,10 +560,7 @@ Observed behavior:
 
 - the old wrong-project contamination did **not** reappear
 - the first wave submitted `8` batches
-- `7` of those `8` batches completed successfully
-- only `batch_014` failed
-
-What failed inside `batch_014`:
+- `8` batches completed successfully
 
 - SciUnit created the correct project:
   - `/home/nkmh5/sciunit/project_run_002_20260330_014054_batch_014`
