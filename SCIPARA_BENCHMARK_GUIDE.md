@@ -336,7 +336,7 @@ Purpose:
 
 ## SciUnit-Specific Output
 
-In `sciunit` mode, the batch runner also creates a SciUnit project directory outside the benchmark repo:
+In `sciunit` mode, the batch runner also creates a SciUnit project directory:
 
 Location:
 - `~/sciunit/project_<run_label>_<batch_id>`
