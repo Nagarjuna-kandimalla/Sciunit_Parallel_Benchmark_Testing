@@ -11,32 +11,32 @@ The benchmark prepares a weather dataset, splits it into many files, groups thos
 
 ### Top level
 
-- [scipara_io_benchmark](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark)
+- [scipara_io_benchmark](scipara_io_benchmark)
   Main benchmark project. This is the directory most users will work in.
 
-- [SCIPARA_BENCHMARK_GUIDE.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/SCIPARA_BENCHMARK_GUIDE.md)
+- [SCIPARA_BENCHMARK_GUIDE.md](SCIPARA_BENCHMARK_GUIDE.md)
   Output-focused guide. Explains where run-labeled results, metrics, and logs are written.
 
-- [Lock_Issue_Patch.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/Lock_Issue_Patch.md)
+- [Lock_Issue_Patch.md](Lock_Issue_Patch.md)
   Detailed write-up of the SciUnit locking and project-selection fixes.
 
-- [Shell_vs_SciUnit_Jobs8_Comparison.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/snakemake/Shell_vs_SciUnit_Jobs8_Comparison.md)
+- [Shell_vs_SciUnit_Jobs8_Comparison.md](scipara_io_benchmark/results/snakemake/Shell_vs_SciUnit_Jobs8_Comparison.md)
   Focused shell vs SciUnit comparison for the successful `jobs: 8` case.
 
 ### Main benchmark folder
 
-Inside [scipara_io_benchmark](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark):
+Inside [scipara_io_benchmark](scipara_io_benchmark):
 
-- [configs](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/configs)
+- [configs](scipara_io_benchmark/configs)
   Global benchmark configuration such as execution mode, dataset size, run labels, script paths, and monitoring.
 
-- [workflows](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/workflows)
+- [workflows](scipara_io_benchmark/workflows)
   Snakemake workflow definition and Slurm executor profile.
 
-- [scripts](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts)
+- [scripts](scipara_io_benchmark/scripts)
   Python scripts for data preprocessing, per-split processing, merging, monitoring, and metrics aggregation.
 
-- [execution](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution)
+- [execution](scipara_io_benchmark/execution)
   Batch wrapper scripts used by Snakemake.
 
 ## Common Benchmark Data and Shared Assets
@@ -65,32 +65,32 @@ These paths are benchmark assets or benchmark outputs that are useful regardless
   - both files have SHA-256:
     - `d8c35047f6eab063960537c93782c4bef15a2655828489933a6a4a598d2cf9f2`
 
-- [data](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data)
+- [data](scipara_io_benchmark/data)
   Raw input, prepared input, split files, and manifests.
 
-- [batches](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/batches)
+- [batches](scipara_io_benchmark/batches)
   Batch files. Each `batch_XXX.txt` contains a group of split paths.
 
-- [results](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results)
+- [results](scipara_io_benchmark/results)
   Processed outputs and final merged outputs, organized by backend wrapper and run label.
 
-- [metrics](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/metrics)
+- [metrics](scipara_io_benchmark/metrics)
   Raw per-split metrics, merge metrics, and aggregated CSV summaries, organized by backend wrapper and run label.
 
-- [logs](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs)
+- [logs](scipara_io_benchmark/logs)
   Preprocessing logs, batch logs, rule logs, and monitor CSVs, organized by backend wrapper and run label.
 
-- [repeat_temp](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/repeat_temp)
+- [repeat_temp](scipara_io_benchmark/repeat_temp)
   Temporary space used during manual replay experiments.
 
 ## Important Source Files
 
 ### Configuration
 
-- [configs/global.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/configs/global.yaml)
+- [configs/global.yaml](scipara_io_benchmark/configs/global.yaml)
   Main benchmark settings.
 
-- [workflows/snakemake/profile/config.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/workflows/snakemake/profile/config.yaml)
+- [workflows/snakemake/profile/config.yaml](scipara_io_benchmark/workflows/snakemake/profile/config.yaml)
   Slurm executor profile with:
   - `jobs`
   - `slurm_partition`
@@ -100,7 +100,7 @@ These paths are benchmark assets or benchmark outputs that are useful regardless
 
 ### Workflow
 
-- [workflows/snakemake/Snakefile](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/workflows/snakemake/Snakefile)
+- [workflows/snakemake/Snakefile](scipara_io_benchmark/workflows/snakemake/Snakefile)
   Main workflow entry point.
 
 The Snakemake workflow has these main stages:
@@ -113,7 +113,7 @@ The Snakemake workflow has these main stages:
 
 ### Preprocessing scripts
 
-- [scripts/preprocess/run_preprocessing.py](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts/preprocess/run_preprocessing.py)
+- [scripts/preprocess/run_preprocessing.py](scipara_io_benchmark/scripts/preprocess/run_preprocessing.py)
   Runs the whole preprocessing sequence.
 
 - `prepare_dataset.py`
@@ -130,27 +130,27 @@ The Snakemake workflow has these main stages:
 
 ### Execution scripts
 
-- [scripts/execution/process_splits.py](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts/execution/process_splits.py)
+- [scripts/execution/process_splits.py](scipara_io_benchmark/scripts/execution/process_splits.py)
   Core per-split processing script.
 
-- [scripts/execution/merge_outputs.py](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts/execution/merge_outputs.py)
+- [scripts/execution/merge_outputs.py](scipara_io_benchmark/scripts/execution/merge_outputs.py)
   Merges processed split outputs.
 
-- [scripts/execution/metrics.py](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts/execution/metrics.py)
+- [scripts/execution/metrics.py](scipara_io_benchmark/scripts/execution/metrics.py)
   Aggregates raw metrics and monitor logs into summary CSVs.
 
-- [scripts/execution/monitor.py](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts/execution/monitor.py)
+- [scripts/execution/monitor.py](scipara_io_benchmark/scripts/execution/monitor.py)
   Records CPU, memory, disk, and load samples during batch execution.
 
 ### Batch wrappers
 
-- [execution/common/env_setup.sh](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution/common/env_setup.sh)
+- [execution/common/env_setup.sh](scipara_io_benchmark/execution/common/env_setup.sh)
   Shared HPC environment setup. It purges modules, loads Python, activates the benchmark venv, checks SciUnit, checks GNU Parallel, and prints node info.
 
-- [execution/shell/run_batch.sh](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution/shell/run_batch.sh)
+- [execution/shell/run_batch.sh](scipara_io_benchmark/execution/shell/run_batch.sh)
   Shell-mode batch runner.
 
-- [execution/sciunit/run_batch_sciunit.sh](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution/sciunit/run_batch_sciunit.sh)
+- [execution/sciunit/run_batch_sciunit.sh](scipara_io_benchmark/execution/sciunit/run_batch_sciunit.sh)
   SciUnit-mode batch runner.
 
 ## SciUnit Runtime Project File
@@ -174,7 +174,7 @@ At present, the implemented and documented backend is Snakemake + Slurm.
 
 ### Snakemake-Specific Workflow State
 
-- [.snakemake](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/.snakemake)
+- [.snakemake](scipara_io_benchmark/.snakemake)
   Workflow-local Snakemake state, controller logs, locks, and Slurm wrapper logs.
 
 ### Snakemake + Slurm: End-to-End HPC Execution
@@ -214,8 +214,8 @@ This generates:
 
 Edit these files before launching the main workflow:
 
-- [configs/global.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/configs/global.yaml)
-- [workflows/snakemake/profile/config.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/workflows/snakemake/profile/config.yaml)
+- [configs/global.yaml](scipara_io_benchmark/configs/global.yaml)
+- [workflows/snakemake/profile/config.yaml](scipara_io_benchmark/workflows/snakemake/profile/config.yaml)
 
 Key fields in `global.yaml`:
 
@@ -400,8 +400,8 @@ Practical interpretation:
 If you are new to the repo, use this order:
 
 1. Read this README.
-2. Check [SCIPARA_BENCHMARK_GUIDE.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/SCIPARA_BENCHMARK_GUIDE.md) for output paths.
-3. Edit [configs/global.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/configs/global.yaml) and [config.yaml](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/workflows/snakemake/profile/config.yaml).
+2. Check [SCIPARA_BENCHMARK_GUIDE.md](SCIPARA_BENCHMARK_GUIDE.md) for output paths.
+3. Edit [configs/global.yaml](scipara_io_benchmark/configs/global.yaml) and [config.yaml](scipara_io_benchmark/workflows/snakemake/profile/config.yaml).
 4. Run preprocessing.
 5. Run `snakemake --unlock`.
 6. Run `snakemake -n`.
