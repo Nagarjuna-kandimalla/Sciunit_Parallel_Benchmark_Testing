@@ -40,7 +40,7 @@ Inside [scipara_io_benchmark](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Bench
   Snakemake workflow definition and Slurm executor profile.
 
 - [scripts](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/scripts)
-  Python scripts for preprocessing, per-split processing, merging, monitoring, and metrics aggregation.
+  Python scripts for data preprocessing, per-split processing, merging, monitoring, and metrics aggregation.
 
 - [execution](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution)
   Batch wrapper scripts used by Snakemake.
@@ -148,15 +148,7 @@ The Snakemake workflow has these main stages:
 - [execution/sciunit/run_batch_sciunit.sh](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/execution/sciunit/run_batch_sciunit.sh)
   SciUnit-mode batch runner.
 
-## SciUnit Runtime Workspace
-
-SciUnit project directories are stored outside the repo here:
-
-- [sciunit](/cluster/pixstor/data/nkmh5/sciunit)
-
-SciUnit still reaches them through:
-
-- [sciunit](/home/nkmh5/sciunit)
+## SciUnit Runtime Project File
 
 Each SciUnit batch creates a project named like:
 
