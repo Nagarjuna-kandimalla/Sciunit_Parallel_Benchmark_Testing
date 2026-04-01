@@ -78,7 +78,7 @@ Purpose:
 ### Preprocessing Log
 
 Location:
-- `scipara_io_benchmark/logs/preprocess/preprocessing.log`
+- `scipara_io_benchmark/logs/snakemake/preprocess/preprocessing.log`
 
 Produced by:
 - `scipara_io_benchmark/scripts/preprocess/run_preprocessing.py`
@@ -93,9 +93,9 @@ Execution outputs are now isolated by run label.
 
 General layout:
 
-- `scipara_io_benchmark/results/<run_label>/...`
-- `scipara_io_benchmark/metrics/<run_label>/...`
-- `scipara_io_benchmark/logs/<run_label>/...`
+- `scipara_io_benchmark/results/snakemake/<run_label>/...`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/...`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/...`
 
 Example run label:
 - `run_001_20260328_220114`
@@ -107,7 +107,7 @@ This means every workflow run gets its own directory tree and suffixed output fi
 ### Processed Split Output
 
 Location:
-- `scipara_io_benchmark/results/<run_label>/<mode>/<size>/processed/split_XXXX_<run_label>.out`
+- `scipara_io_benchmark/results/snakemake/<run_label>/<mode>/<size>/processed/split_XXXX_<run_label>.out`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/process_splits.py`
@@ -125,7 +125,7 @@ Purpose:
 ### Per-Split Metrics JSON
 
 Location:
-- `scipara_io_benchmark/metrics/<run_label>/raw/<mode>/<size>/split_XXXX_<run_label>.json`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/raw/<mode>/<size>/split_XXXX_<run_label>.json`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/process_splits.py`
@@ -151,7 +151,7 @@ Purpose:
 ### Per-Split Rule Log
 
 Location:
-- `scipara_io_benchmark/logs/<run_label>/rules/<mode>/<size>/split_XXXX_<run_label>.log`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/rules/<mode>/<size>/split_XXXX_<run_label>.log`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/process_splits.py`
@@ -164,7 +164,7 @@ Contents:
 ### Batch Completion Marker
 
 Location:
-- `scipara_io_benchmark/results/<run_label>/<mode>/<size>/batch_XXX_<run_label>.done`
+- `scipara_io_benchmark/results/snakemake/<run_label>/<mode>/<size>/batch_XXX_<run_label>.done`
 
 Produced by:
 - Snakemake `run_batch` rule
@@ -178,7 +178,7 @@ Purpose:
 ### Batch Log
 
 Location:
-- `scipara_io_benchmark/logs/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
 
 Produced by:
 - `scipara_io_benchmark/execution/shell/run_batch.sh`
@@ -197,7 +197,7 @@ Contents:
 ### Per-Batch Monitor CSV
 
 Location:
-- `scipara_io_benchmark/logs/<run_label>/monitor/<mode>_<size>_batch_XXX_<run_label>.csv`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/monitor/<mode>_<size>_batch_XXX_<run_label>.csv`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/monitor.py`
@@ -217,7 +217,7 @@ Purpose:
 ### Combined Monitor CSV
 
 Location:
-- `scipara_io_benchmark/logs/<run_label>/monitor/<mode>_<size>_<run_label>_combined.csv`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/monitor/<mode>_<size>_<run_label>_combined.csv`
 
 Produced by:
 - Snakemake `combine_monitor_logs` rule
@@ -231,7 +231,7 @@ Contents:
 ### Final Merged Output
 
 Location:
-- `scipara_io_benchmark/results/<run_label>/<mode>/<size>/final_output_<run_label>.txt`
+- `scipara_io_benchmark/results/snakemake/<run_label>/<mode>/<size>/final_output_<run_label>.txt`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/merge_outputs.py`
@@ -242,7 +242,7 @@ Contents:
 ### Merge Log
 
 Location:
-- `scipara_io_benchmark/logs/<run_label>/rules/<mode>/<size>/merge_<run_label>.log`
+- `scipara_io_benchmark/logs/snakemake/<run_label>/rules/<mode>/<size>/merge_<run_label>.log`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/merge_outputs.py`
@@ -257,7 +257,7 @@ Contents:
 ### Merge Metrics JSON
 
 Location:
-- `scipara_io_benchmark/metrics/<run_label>/raw/<mode>/<size>/merge_<run_label>.json`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/raw/<mode>/<size>/merge_<run_label>.json`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/merge_outputs.py`
@@ -279,7 +279,7 @@ Contents:
 ### Detailed Split CSV
 
 Location:
-- `scipara_io_benchmark/metrics/<run_label>/aggregated/<mode>_<size>_<run_label>_splits.csv`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/aggregated/<mode>_<size>_<run_label>_splits.csv`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/metrics.py`
@@ -304,7 +304,7 @@ Contents:
 ### Aggregated Results CSV
 
 Location:
-- `scipara_io_benchmark/metrics/<run_label>/aggregated/results_<run_label>.csv`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/aggregated/results_<run_label>.csv`
 
 Produced by:
 - `scipara_io_benchmark/scripts/execution/metrics.py`
@@ -323,7 +323,7 @@ Contents:
 ### Final Done Marker
 
 Location:
-- `scipara_io_benchmark/metrics/<run_label>/aggregated/<mode>_<size>_<run_label>.done`
+- `scipara_io_benchmark/metrics/snakemake/<run_label>/aggregated/<mode>_<size>_<run_label>.done`
 
 Produced by:
 - Snakemake `collect_metrics` rule
@@ -400,4 +400,3 @@ run_label: run_001_manual_test
 run_number: ""
 run_number_start: 1
 ```
-

@@ -20,14 +20,8 @@ The benchmark prepares a weather dataset, splits it into many files, groups thos
 - [Lock_Issue_Patch.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/Lock_Issue_Patch.md)
   Detailed write-up of the SciUnit locking and project-selection fixes.
 
-- [SciUnit_Issue_Analysis_And_Results_Comparison.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/SciUnit_Issue_Analysis_And_Results_Comparison.md)
-  Investigation notes, failure analysis, and benchmark observations.
-
-- [Shell_vs_SciUnit_Jobs8_Comparison.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/Shell_vs_SciUnit_Jobs8_Comparison.md)
+- [Shell_vs_SciUnit_Jobs8_Comparison.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results/snakemake/Shell_vs_SciUnit_Jobs8_Comparison.md)
   Focused shell vs SciUnit comparison for the successful `jobs: 8` case.
-
-- [SciUnit_Project_Folder_Anatomy.md](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/SciUnit_Project_Folder_Anatomy.md)
-  Explains what lives inside a SciUnit project directory.
 
 ### Main benchmark folder
 
@@ -60,6 +54,17 @@ These paths are benchmark assets or benchmark outputs that are useful regardless
   - `data/splits/1g/split_0062.txt`
   - `batches/1g/batch_013.txt`
 
+- The repo also includes a small tracked result sample set for:
+  - shell run `run_001_20260329_033941`
+  - SciUnit `jobs: 8` run `run_jobs_used8_003_20260330_062715`
+  These tracked samples cover representative per-split outputs, raw metrics JSONs, per-split logs, batch logs, monitor CSVs, merge artifacts, and aggregated CSV summaries for `split_0061`, `split_0062`, and `batch_013`.
+
+- Final merged output comparison:
+  - shell final output and SciUnit `jobs: 8` final output are identical
+  - `cmp` returned `0`
+  - both files have SHA-256:
+    - `d8c35047f6eab063960537c93782c4bef15a2655828489933a6a4a598d2cf9f2`
+
 - [data](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/data)
   Raw input, prepared input, split files, and manifests.
 
@@ -67,13 +72,13 @@ These paths are benchmark assets or benchmark outputs that are useful regardless
   Batch files. Each `batch_XXX.txt` contains a group of split paths.
 
 - [results](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/results)
-  Processed outputs and final merged outputs, organized by run label.
+  Processed outputs and final merged outputs, organized by backend wrapper and run label.
 
 - [metrics](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/metrics)
-  Raw per-split metrics, merge metrics, and aggregated CSV summaries.
+  Raw per-split metrics, merge metrics, and aggregated CSV summaries, organized by backend wrapper and run label.
 
 - [logs](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/logs)
-  Preprocessing logs, batch logs, rule logs, and monitor CSVs.
+  Preprocessing logs, batch logs, rule logs, and monitor CSVs, organized by backend wrapper and run label.
 
 - [repeat_temp](/cluster/pixstor/data/nkmh5/Sciunit_Parallel_Benchmark_Testing/scipara_io_benchmark/repeat_temp)
   Temporary space used during manual replay experiments.
@@ -203,7 +208,7 @@ This generates:
 - `data/splits/1g/split_XXXX.txt`
 - `data/manifests/splits_1g.txt`
 - `batches/1g/batch_XXX.txt`
-- `logs/preprocess/preprocessing.log`
+- `logs/snakemake/preprocess/preprocessing.log`
 
 #### 4. Set workflow configuration
 
@@ -307,7 +312,7 @@ Complete log: .snakemake/log/2026-03-30T062715.073102.snakemake.log
 
 Batch log location:
 
-- `logs/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
+- `logs/snakemake/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
 
 Typical healthy SciUnit batch log:
 
@@ -328,14 +333,14 @@ Opened empty sciunit at /home/nkmh5/sciunit/project_run_jobs_used8_003_20260330_
 
 For a completed run label `<run_label>`:
 
-- `results/<run_label>/<mode>/<size>/processed/*.out`
-- `results/<run_label>/<mode>/<size>/final_output_<run_label>.txt`
-- `metrics/<run_label>/raw/<mode>/<size>/*.json`
-- `metrics/<run_label>/aggregated/results_<run_label>.csv`
-- `metrics/<run_label>/aggregated/<mode>_<size>_<run_label>_splits.csv`
-- `logs/<run_label>/batch/...`
-- `logs/<run_label>/rules/...`
-- `logs/<run_label>/monitor/...`
+- `results/snakemake/<run_label>/<mode>/<size>/processed/*.out`
+- `results/snakemake/<run_label>/<mode>/<size>/final_output_<run_label>.txt`
+- `metrics/snakemake/<run_label>/raw/<mode>/<size>/*.json`
+- `metrics/snakemake/<run_label>/aggregated/results_<run_label>.csv`
+- `metrics/snakemake/<run_label>/aggregated/<mode>_<size>_<run_label>_splits.csv`
+- `logs/snakemake/<run_label>/batch/...`
+- `logs/snakemake/<run_label>/rules/...`
+- `logs/snakemake/<run_label>/monitor/...`
 
 In SciUnit mode, you should also see fresh projects under:
 
@@ -365,8 +370,8 @@ Check in this order:
 
 1. `scipara_io_benchmark/.snakemake/log/<timestamp>.snakemake.log`
 2. `scipara_io_benchmark/.snakemake/slurm_logs/...`
-3. `logs/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
-4. `logs/<run_label>/rules/<mode>/<size>/split_XXXX_<run_label>.log`
+3. `logs/snakemake/<run_label>/batch/<mode>/<size>/batch_XXX_<run_label>.log`
+4. `logs/snakemake/<run_label>/rules/<mode>/<size>/split_XXXX_<run_label>.log`
 
 #### Common failure patterns observed in this repo
 

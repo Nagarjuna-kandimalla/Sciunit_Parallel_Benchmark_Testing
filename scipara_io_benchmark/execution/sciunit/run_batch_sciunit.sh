@@ -9,6 +9,7 @@ PROCESS_SCRIPT=$4
 ENABLE_MONITOR=${5:-false}
 MONITOR_SCRIPT=${6:-scripts/execution/monitor.py}
 RUN_LABEL=${7:-adhoc_$(date +%Y%m%d_%H%M%S)}
+SCIUNIT_PROJECT_SCOPE=${8:-batch}
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd "$SCRIPT_DIR/../.." && pwd)
@@ -53,7 +54,11 @@ BATCH_ID=$(basename "$BATCH_FILE" .txt)
 RUN_RESULTS_ROOT="$REPO_ROOT/results/${RUN_LABEL}"
 RUN_METRICS_ROOT="$REPO_ROOT/metrics/${RUN_LABEL}"
 RUN_LOG_ROOT="$REPO_ROOT/logs/${RUN_LABEL}"
-SCIUNIT_PROJECT_NAME="project_${RUN_LABEL}_${BATCH_ID}"
+if [[ "$SCIUNIT_PROJECT_SCOPE" == "run" ]]; then
+    SCIUNIT_PROJECT_NAME="project_${RUN_LABEL}"
+else
+    SCIUNIT_PROJECT_NAME="project_${RUN_LABEL}_${BATCH_ID}"
+fi
 
 LOG_FILE="$RUN_LOG_ROOT/batch/${MODE}/${SIZE}/${BATCH_ID}_${RUN_LABEL}.log"
 MONITOR_FILE="$RUN_LOG_ROOT/monitor/${MODE}_${SIZE}_${BATCH_ID}_${RUN_LABEL}.csv"
@@ -76,6 +81,7 @@ echo "[INFO] Mode: $MODE | Size: $SIZE" | tee -a "$LOG_FILE"
 echo "[INFO] Run label: $RUN_LABEL" | tee -a "$LOG_FILE"
 echo "[INFO] Batch file: $BATCH_FILE" | tee -a "$LOG_FILE"
 echo "[INFO] Process script: $PROCESS_SCRIPT" | tee -a "$LOG_FILE"
+echo "[INFO] Sciunit project scope: $SCIUNIT_PROJECT_SCOPE" | tee -a "$LOG_FILE"
 echo "[INFO] Sciunit project: $SCIUNIT_PROJECT_NAME" | tee -a "$LOG_FILE"
 
 if [[ "$ENABLE_MONITOR" == "true" ]]; then
@@ -110,9 +116,41 @@ mkdir -p "$RUN_METRICS_ROOT/raw/${MODE}/${SIZE}"
 mkdir -p "$RUN_LOG_ROOT/rules/${MODE}/${SIZE}"
 
 echo "[INFO] Launching Sciunit parallel tasks..." | tee -a "$LOG_FILE"
-echo "[INFO] Creating fresh Sciunit project..." | tee -a "$LOG_FILE"
+SCIUNIT_WORKSPACE_ROOT="$HOME/sciunit"
 
-python -m sciunit2 create -f "$SCIUNIT_PROJECT_NAME" >> "$LOG_FILE" 2>&1
+ensure_sciunit_project() {
+    local lock_dir="$SCIUNIT_WORKSPACE_ROOT/.setup_${SCIUNIT_PROJECT_NAME}.lock"
+    local project_dir="$SCIUNIT_WORKSPACE_ROOT/$SCIUNIT_PROJECT_NAME"
+    local status=0
+
+    mkdir -p "$SCIUNIT_WORKSPACE_ROOT"
+
+    while ! mkdir "$lock_dir" 2>/dev/null; do
+        sleep 0.1
+    done
+
+    if [[ "$SCIUNIT_PROJECT_SCOPE" == "run" && -d "$project_dir" ]]; then
+        echo "[INFO] Opening existing shared Sciunit project..." | tee -a "$LOG_FILE"
+        if ! python -m sciunit2 open "$SCIUNIT_PROJECT_NAME" >> "$LOG_FILE" 2>&1; then
+            status=$?
+        fi
+    else
+        if [[ "$SCIUNIT_PROJECT_SCOPE" == "run" ]]; then
+            echo "[INFO] Creating shared Sciunit project..." | tee -a "$LOG_FILE"
+        else
+            echo "[INFO] Creating fresh Sciunit project..." | tee -a "$LOG_FILE"
+        fi
+
+        if ! python -m sciunit2 create -f "$SCIUNIT_PROJECT_NAME" >> "$LOG_FILE" 2>&1; then
+            status=$?
+        fi
+    fi
+
+    rmdir "$lock_dir" 2>/dev/null || true
+    return "$status"
+}
+
+ensure_sciunit_project
 
 python -m sciunit2 parallel_exec python "$PROCESS_SCRIPT" \
   ::: "${INPUTS[@]}" \

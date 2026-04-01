@@ -27,6 +27,7 @@ MONITOR_SCRIPT = config.get("monitor_script", "scripts/execution/monitor.py")
 
 ENABLE_MONITOR = config.get("enable_monitor", True)
 ENABLE_MONITOR_STR = "true" if ENABLE_MONITOR else "false"
+SCIUNIT_PROJECT_SCOPE = str(config.get("sciunit_project_scope", "batch") or "batch").strip()
 RUN_LABEL_OVERRIDE = str(config.get("run_label", "") or "").strip()
 RUN_NUMBER_OVERRIDE = str(config.get("run_number", "") or "").strip()
 RUN_NUMBER_START = int(config.get("run_number_start", 1))
@@ -113,6 +114,7 @@ rule run_batch:
         process_script=PROCESS_SCRIPT,
         monitor_script=MONITOR_SCRIPT,
         enable_monitor=ENABLE_MONITOR_STR,
+        sciunit_project_scope=SCIUNIT_PROJECT_SCOPE,
         run_label=RUN_LABEL
     threads: 5
     shell:
@@ -127,7 +129,7 @@ rule run_batch:
         else
             bash "{BENCHMARK_ROOT}/execution/sciunit/run_batch_sciunit.sh" \
                 "{input.batch_file}" "{params.mode}" "{params.size}" \
-                "{params.process_script}" "{params.enable_monitor}" "{params.monitor_script}" "{params.run_label}"
+                "{params.process_script}" "{params.enable_monitor}" "{params.monitor_script}" "{params.run_label}" "{params.sciunit_project_scope}"
         fi
         """
 

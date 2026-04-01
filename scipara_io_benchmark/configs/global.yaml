@@ -7,7 +7,7 @@ tasks_per_batch: 5         # MUST match your batch files
 # -----------------------------
 # Run naming
 # -----------------------------
-run_label: ""              # optional exact label, e.g. run_001_20260328_120000
+run_label: "run_jobs_used8_single_sciunit_project_20260331_012857"  # optional exact label, e.g. run_001_20260328_120000
 run_number: ""             # optional exact run number, e.g. 1
 run_number_start: 1        # minimum auto-generated run number
 
@@ -16,9 +16,9 @@ run_number_start: 1        # minimum auto-generated run number
 # -----------------------------
 data_root: data
 batch_root: batches
-results_root: results
-metrics_root: metrics
-logs_root: logs
+results_root: results/snakemake
+metrics_root: metrics/snakemake
+logs_root: logs/snakemake
 
 # -----------------------------
 # Script paths
@@ -32,3 +32,8 @@ monitor_script: scripts/execution/monitor.py
 # Monitoring
 # -----------------------------
 enable_monitor: true
+
+# -----------------------------
+# SciUnit project layout
+# -----------------------------
+sciunit_project_scope: run  # batch OR run
